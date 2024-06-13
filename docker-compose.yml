@@ -1,0 +1,56 @@
+version: '3.8'
+services:
+  postgres:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.postgres
+    container_name: postgres-1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: employees
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  mongodb:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.mongodb
+    container_name: mongodb-1
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./backend/photo_aggr:/docker-entrypoint-initdb.d/photo_aggr
+
+  api_server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.api_server
+    container_name: api-server-1
+    environment:
+      MONGO_URI: "mongodb://mongodb:27017/"
+      MONGO_INITDB_DATABASE: "photo_aggr"
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: employees
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - mongodb
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./frontend/vue-lessons
+      dockerfile: Dockerfile.vue-app
+    container_name: vue-app
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:
+  mongo-data:

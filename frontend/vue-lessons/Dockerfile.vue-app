@@ -1,0 +1,28 @@
+# Устанавливаем базовый образ
+FROM node:16-alpine as build-stage
+
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем package.json и package-lock.json
+COPY package*.json ./
+
+# Устанавливаем зависимости
+RUN npm install
+
+# Копируем остальные файлы
+COPY . .
+
+RUN npm install tailwindcss@latest @headlessui/vue @heroicons/vue
+
+# Сборка проекта
+RUN npm run build
+
+# Устанавливаем веб-сервер для раздачи статики
+RUN npm install -g serve
+
+# Экспонируем порт
+EXPOSE 8080
+
+# Запускаем веб-сервер
+CMD ["serve", "-s", "dist", "-l", "8080"]
