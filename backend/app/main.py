@@ -19,7 +19,6 @@ app.include_router(phototgrapher_router.router, prefix="/photographers", tags=["
 app.include_router(order_router.router, prefix="/orders", tags=["orders"])
 app.include_router(request_router.router, prefix="/requests", tags=["requests"])
 app.include_router(service_router.router, prefix="/services", tags=["services"])
-# app.include_router(employee_handler.router, prefix="/employees", tags=["employees"])
 
 if __name__ == "__main__":
     import uvicorn
