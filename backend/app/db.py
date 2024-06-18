@@ -34,3 +34,5 @@ def get_employees_collection():
     conn = get_postgres_connection()
     cur = conn.cursor()
     return conn, cur
+
+

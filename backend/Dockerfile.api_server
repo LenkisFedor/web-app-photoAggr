@@ -7,7 +7,7 @@ COPY ./requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./pythonProject1 /app
+COPY ./app /app
 
 RUN pip install pymongo
 
